@@ -1,11 +1,8 @@
-import numpy as np
 import os
 import six.moves.urllib as urllib
 import sys
 import tarfile
-# import tensorflow as tf
 import tensorflow.compat.v1 as tf
-tf.disable_v2_behavior()
 import zipfile
 import time
 from imutils.video import WebcamVideoStream
@@ -30,16 +27,12 @@ from PIL import ImageTk
 import json
 import re
 import datetime
-import mysql.connector
 
-#connecting to database
-# mydb = mysql.connector.connect(
-# 	host="localhost",
-# 	user="root",
-# 	password="",
-# 	database="Finalyearproject"
-# )
+from utils import label_map_util
 
+from utils import visualization_utils as vis_util
+
+tf.disable_v2_behavior()
 
 if tf.__version__ < '1.4.0':
 	raise ImportError('Please upgrade your tensorflow installation to v1.4.* or later!')
@@ -49,10 +42,6 @@ if tf.__version__ < '1.4.0':
 # This is needed since the notebook is stored in the object_detection folder.
 # sys.path.append("..")
 
-
-from utils import label_map_util
-
-from utils import visualization_utils as vis_util
 
 # What model to download.
 MODEL_NAME = 'Cars'
@@ -112,7 +101,7 @@ def matchVehicles(currentFrameVehicles,im_width,im_height,image):
 			X=int((x+x+w)/2)
 			Y=int((y+y+h)/2)
 			if Y>yl5:
-				#cv2.circle(image,(X,Y),2,(0,255,0),4)
+				cv2.circle(image,(X,Y),2,(0,255,0),4)
 				#print('Y=',Y,'  y1=',yl1)
 				vehicles.append(vehicle((x,y,w,h)))
 
@@ -188,16 +177,12 @@ def checkRedLightCrossed(img):
 				display2.imgtk = imgtk2 #Shows frame for display 1
 				display2.configure(image=imgtk2)
 				#cv2.imshow('BROKE',bimg)
-				name='Storage/Red Light Crossed/Voilated on '+str(time.time())+'.jpg'
+				name='Rule Breakers/Red Light Crossed/Voilated on '+str(time.time())+'.jpg'
 				cv2.imwrite(name,bimg)
 				tstop = threading.Event()
 				thread = threading.Thread(target=getLicensePlateNumber, args=(name,))
 				thread.daemon = True
 				thread.start()
-				
-
-				#cv2.imwrite('culprit.png',bimg)
-	#display3.configure(text=count)
 
 def checkSpeed(ftime,img):
 	for v in vehicles:
@@ -226,7 +211,7 @@ def checkSpeed(ftime,img):
 				display3.configure(text=str(speed)[:5]+'Km/hr')
 				if speed>60:
 					#cv2.imshow('BROKE',bimg)
-					name='Storage/Speed Limit Crossed/Voilated on '+str(time.time())+'.jpg'
+					name='Rule Breakers/Speed Limit Crossed/Voilated on '+str(time.time())+'.jpg'
 					cv2.imwrite(name,bimg)
 					tstop = threading.Event()
 					thread = threading.Thread(target=getLicensePlateNumber, args=(name,))
@@ -249,8 +234,10 @@ with detection_graph.as_default():
 label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
 categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
-
-cap=cv2.VideoCapture('video7.avi') # 0 stands for very first webcam attach
+#This is for development 
+cap=cv2.VideoCapture('dev.avi') # 0 stands for very first webcam attach
+#For demo uncomment this line and comment above line
+# cap=cv2.VideoCapture('video7.avi') # 0 stands for very first webcam attach
 filename="testoutput.avi"
 codec=cv2.VideoWriter_fourcc('m','p','4','v')#fourcc stands for four character code
 framerate=10
