@@ -27,6 +27,8 @@ from PIL import ImageTk
 import json
 import re
 import datetime
+import mysql.connector
+
 
 from utils import label_map_util
 
@@ -64,7 +66,11 @@ state = ''
 return_image = 0
 topn = 1
 prewarp = ''
-
+mydb = mysql.connector.connect(
+          host="localhost",
+          user="root",
+          password="",
+          database="traffic")
 def getLicensePlateNumber(filer):
 	try:
 		js = api.recognize_file(filer, secret_key, country, recognize_vehicle=recognize_vehicle, state=state, return_image=return_image, topn=topn, prewarp=prewarp)
@@ -85,10 +91,16 @@ def getLicensePlateNumber(filer):
 		cv2image3 = cv2.cvtColor(frame3, cv2.COLOR_BGR2RGBA)
 		img3 = Image.fromarray(cv2image3)
 		imgtk3 = ImageTk.PhotoImage(image=img3)
-		display4.imgtk = imgtk3 #Shows frame for display 1
+		display4.imgtk = imgtk3 
 		display4.configure(image=imgtk3)
 		display5.configure(text=js['results'][0]['plate'])
 		platenum=js['results'][0]['plate']
+		mydb.reconnect()
+		mycursor =mydb.cursor()
+		sql = "INSERT INTO victim (num_plate) VALUES (%s)"
+		val = ('AJO 8004',)
+		mycursor.execute(sql, val)
+		mydb.commit()
 	except ApiException as e:
 	    print("Exception: \n", e)
 

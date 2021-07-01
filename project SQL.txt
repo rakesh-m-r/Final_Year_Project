@@ -1,0 +1,77 @@
+create table victim (num_plate varchar(15) not null, count integer default 1, cases varchar(255) default null, foreign key(num_plate) references users(num_plate));
+ desc victim;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| num_plate | varchar(15)  | NO   | MUL | NULL    |       |
+| count     | int          | YES  |     | 1       |       |
+| cases     | varchar(255) | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+
+create table users (name varchar(255), num_plate varchar(15) not null, phone_num varchar(15), address varchar(255),email varchar(255), PRIMARY KEY(num_plate));
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| name      | varchar(255) | YES  |     | NULL    |       |
+| num_plate | varchar(15)  | NO   | PRI | NULL    |       |
+| phone_num | varchar(15)  | YES  |     | NULL    |       |
+| address   | varchar(255) | YES  |     | NULL    |       |
+| email     | varchar(255) | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+
+allusers = {
+            {
+                "name": "Robert",
+                "num_plate": "AJO 8004",
+                "phone_num": 9988776655,
+                "address": "JP NAGAR Bangalore",
+                "email": "robert@gmail.com"
+            },
+            {
+                "name": "Raju",
+                "num_plate": "MDS 9927",
+                "phone_num": 9988776612,
+                "address": "Jayanagar Bangalore",
+                "email": "Raju@gmail.com"
+            },
+            {
+             
+                "name": "Tom",
+                "num_plate": "ATU 4297",
+                "phone_num": 9988776667,
+                "address": "Yelahanka Bangalore",
+                "email": "Tom@gmail.com"
+            },
+            {
+               
+                "name": "Billi",
+                "num_plate": "AVQ 2381",
+                "phone_num": 9988176655,
+                "address": "Bangalore",
+                "email": "Billi@gmail.com"
+            },
+            {
+                
+                "name": "Knight",
+                "num_plate": "ATN 6178",
+                "phone_num": 9958776655,
+                "address": "Avalahalli Bangalore",
+                "email": "Knight@gmail.com"
+            },
+            {
+               
+                "name": "Strange",
+                "num_plate": "OQJ 6805",
+                "phone_num": 9912776655,
+                "address": "BTM Layout Bangalore",
+                "email": "Strange@gmail.com"
+            },
+            {
+                
+                "name": "Jack",
+                "num_plate": "BAI 7690",
+                "phone_num": 9988776655,
+                "address": "JVM nagar Bangalore",
+                "email": "Jack@gmail.com"
+            },
+        }
