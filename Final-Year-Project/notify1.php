@@ -41,8 +41,8 @@ $mail->setFrom('rakeshmr723@gmail.com');
 $mail->addAddress($email);
 $mail->addReplyTo('rakeshmr723@gmail.com');
 $mail->isHTML(true);
-$mail->Subject = 'Reminder to Pay the Traffic Voilation Fine';
-$mail->Body = "Hey {$name},<br>This mail is to remind you to pay the Fine for the {$case} voilation on {$time}. Please pay the fine to avoid any legal action on same.<br><bR>Thank You<br> Dept of Traffic";
+$mail->Subject = 'Traffic Rule Voilation Details';
+$mail->Body = "Hey {$name},<br>This mail is to inform you to that you voilated the {$case} voilation on {$time}. Please pay the fine to avoid any legal action on same.<br><bR>Thank You<br> Dept of Traffic";
 if (!$mail->send()) {
     echo $mail->ErrorInfo;
 } else {

@@ -110,6 +110,7 @@ function email(data){
     var request = new XMLHttpRequest();
     request.open("GET", "notify.php?num_plate="+data, true);
   request.send();
+  alert("email sent")
 }
 </script>
     

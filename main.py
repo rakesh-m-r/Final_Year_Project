@@ -28,6 +28,7 @@ import json
 import re
 import datetime
 import mysql.connector
+import requests
 
 
 from utils import label_map_util
@@ -71,10 +72,10 @@ mydb = mysql.connector.connect(
           user="root",
           password="",
           database="traffic")
+
 def getLicensePlateNumber(filer):
 	try:
 		js = api.recognize_file(filer, secret_key, country, recognize_vehicle=recognize_vehicle, state=state, return_image=return_image, topn=topn, prewarp=prewarp)
-
 		js=js.to_dict()
 		#js=list(str(js))
 		X1=js['results'][0]['coordinates'][0]['x']
@@ -94,13 +95,16 @@ def getLicensePlateNumber(filer):
 		display4.imgtk = imgtk3 
 		display4.configure(image=imgtk3)
 		display5.configure(text=js['results'][0]['plate'])
-		platenum=js['results'][0]['plate']
+		platenum=js['results'][0]['plate'][0:3]+" "+js['results'][0]['plate'][3:]
+		type=filer.split("/")[1]
 		mydb.reconnect()
 		mycursor =mydb.cursor()
-		sql = "INSERT INTO victim (num_plate) VALUES (%s)"
-		val = ('AJO 8004',)
+		sql = "INSERT INTO victim (num_plate,cases) VALUES (%s,%s)"
+		val = (platenum,type,)
 		mycursor.execute(sql, val)
 		mydb.commit()
+		requests.get('http://localhost/final-year-project/notify.php?num_plate='+platenum)
+
 	except ApiException as e:
 	    print("Exception: \n", e)
 
